@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="archetypes.pfgextender">
+
+  <include file="configure.zcml" />
+  <include package="Products.GenericSetup" />
+
+  <include file="testing_profiles.zcml" />
+
+</configure>
