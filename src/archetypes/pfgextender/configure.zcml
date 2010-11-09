@@ -22,4 +22,10 @@
          zope.app.container.interfaces.IObjectAddedEvent"
     handler=".handlers.addedForm" />
 
+  <adapter 
+      for=".interfaces.IPFGExtensible"
+      provides="archetypes.schemaextender.interfaces.ISchemaExtender"
+      factory=".extender.Extender"
+      />
+     
 </configure>

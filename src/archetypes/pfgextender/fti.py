@@ -1,32 +1,21 @@
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
-from zope.interface.interfaces import IInterface
 from zope.interface import alsoProvides
-from zope.dottedname.resolve import resolve
 
 from Products.CMFDynamicViewFTI.fti import DynamicViewTypeInformation
+
+from archetypes.pfgextender.interfaces import IPFGExtensible
 
 
 class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
 
     _properties = DynamicViewTypeInformation._properties + (
-        {'id': 'marking_interface', 'type': 'string', 'mode': 'w',
+        {'id': 'pfgform_id', 'type': 'string', 'mode': 'w',
           'label': 'Interface put on created instances'},)
 
-    marking_interface = ''
+    pfgform_id = ''
     security = ClassSecurityInfo()
-
-    def getMarkingInterface(self):
-        if self.marking_interface == '':
-            return None
-        else:
-            interface = resolve(self.marking_interface)
-            if not IInterface.providedBy(interface):
-                raise TypeError(
-                    "Object resolved from [%s] is not an Interface" %
-                    self.marking_interface)
-            return interface
 
     security.declarePrivate('_constructInstance')
 
@@ -34,9 +23,8 @@ class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
         """Build a bare instance of the appropriate type."""
         new_ob = super(MarkingFactoryTypeInformation, self)._constructInstance(
             container, id, *args, **kw)
-        marking_interface = self.getMarkingInterface()
-        if marking_interface is not None:
-            alsoProvides(new_ob, marking_interface)
+        alsoProvides(new_ob, IPFGExtensible)
+        new_ob.pfgform_id = self.pfgform_id
         return new_ob
 
 InitializeClass(MarkingFactoryTypeInformation)

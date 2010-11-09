@@ -7,7 +7,7 @@ from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
 from archetypes.pfgextender.testing import FORM_ID
 from archetypes.pfgextender.testing import TEXT_ID
-from archetypes.pfgextender.tests import IBirth
+from archetypes.pfgextender.interfaces import IPFGExtensible
 
 PloneTestCase.setupPloneSite()
 
@@ -26,7 +26,11 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testFactory(self):
         id = self.folder.invokeFactory('Birth', 'birth')
         birth = getattr(self.folder, id)
-        self.failUnless(IBirth.providedBy(birth))
+        self.failUnless(IPFGExtensible.providedBy(birth))
+
+    def testNoHandlerImpact(self):
+        self.folder.invokeFactory('FormFolder', 'form')
+        self.failUnless('form' in self.folder)
 
     def testPopulated(self):
         self.loginAsPortalOwner()
@@ -37,7 +41,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        self.folder.invokeFactory('Document', DOCUMENT_ID)
+        self.folder.invokeFactory('Birth', DOCUMENT_ID)
         document = getattr(self.folder, DOCUMENT_ID)
         schema = document.Schema()
         self.failUnless(TEXT_ID in schema.keys())

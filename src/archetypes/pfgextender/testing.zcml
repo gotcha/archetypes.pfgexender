@@ -8,11 +8,5 @@
 
   <include file="testing_profiles.zcml" />
 
-  <adapter 
-      for="Products.ATContentTypes.interface.IATDocument"
-      provides="archetypes.schemaextender.interfaces.ISchemaExtender"
-      factory=".extender.Extender"
-      />
-     
 
 </configure>
