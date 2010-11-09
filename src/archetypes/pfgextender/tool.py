@@ -2,8 +2,10 @@ from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.PortalFolder import PortalFolder
 from Products.CMFCore.utils import UniqueObject
+from Products.PloneFormGen.content.form import FormFolder
 
 TOOL_ID = 'portal_pfgextender'
+
 
 class PFGExtenderTool(UniqueObject, PortalFolder):
 
@@ -14,4 +16,4 @@ class PFGExtenderTool(UniqueObject, PortalFolder):
     plone_tool = True
     security = ClassSecurityInfo()
 
-    allowed_types = ['FormFolder']
+    allowed_types = [FormFolder.portal_type]
