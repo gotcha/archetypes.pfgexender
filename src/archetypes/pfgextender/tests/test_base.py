@@ -7,6 +7,8 @@ from Products.PloneTestCase import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.tools.formGenTool import FormGenTool
 from Products.PloneFormGen.content.form import FormFolder
+from Products.Archetypes.Field import StringField
+from Products.Archetypes.Field import BooleanField
 
 from archetypes.pfgextender.tool import TOOL_ID
 from archetypes.pfgextender.browser.viewlet import FieldsViewlet
@@ -15,6 +17,8 @@ from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
 from archetypes.pfgextender.testing import FORM_ID
 from archetypes.pfgextender.testing import FIRSTNAME_ID
+from archetypes.pfgextender.testing import FIRSTNAME_TITLE
+from archetypes.pfgextender.testing import HOME_ID
 from archetypes.pfgextender.interfaces import IPFGExtensible
 
 PloneTestCase.setupPloneSite()
@@ -66,8 +70,35 @@ class BaseTests(PloneTestCase.PloneTestCase):
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         self.failUnless(FIRSTNAME_ID in schema.keys())
+        self.failUnless(HOME_ID in schema.keys())
+
+    def testFieldsAreWellConstructed(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        schema = birth.Schema()
         field = schema.getField(FIRSTNAME_ID)
         self.assertEquals(field.getName(), FIRSTNAME_ID)
+        self.assertEquals(field.widget.label, FIRSTNAME_TITLE)
+
+    def testBooleanField(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        schema = birth.Schema()
+        field = schema.getField(HOME_ID)
+        self.failUnless(isinstance(field, BooleanField))
+
+    def testStringField(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        schema = birth.Schema()
+        field = schema.getField(FIRSTNAME_ID)
+        self.failUnless(isinstance(field, StringField))
 
     def testFormIsRenamed(self):
         self.loginAsPortalOwner()

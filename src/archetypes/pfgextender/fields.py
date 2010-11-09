@@ -4,9 +4,11 @@ from zope.component.factory import Factory
 from zope.component import getGlobalSiteManager
 from zope.component import ComponentLookupError
 
-from Products.Archetypes.Field import TextField as BaseTextField
+from Products.Archetypes.Field import StringField as BaseStringField
+from Products.Archetypes.Field import BooleanField as BaseBooleanField
 
 from Products.PloneFormGen.content.fields import FGStringField
+from Products.PloneFormGen.content.fields import FGBooleanField
 
 from archetypes.schemaextender.field import BaseExtensionField
 
@@ -44,14 +46,26 @@ class ExtensionField(BaseExtensionField):
         return kwargs
 
 
-class TextField(ExtensionField, BaseTextField):
+class StringField(ExtensionField, BaseStringField):
 
     def __init__(self, pfgField):
-        widgetClass = BaseTextField._properties['widget']
+        widgetClass = BaseStringField._properties['widget']
         kwargs = self.getConstructorKwargs(pfgField, widgetClass)
-        BaseTextField.__init__(self, **kwargs)
+        BaseStringField.__init__(self, **kwargs)
 
 
-textFieldFactory = Factory(TextField)
+stringFieldFactory = Factory(StringField)
 
-registerFactory(textFieldFactory, FGStringField)
+registerFactory(stringFieldFactory, FGStringField)
+
+
+class BooleanField(ExtensionField, BaseBooleanField):
+
+    def __init__(self, pfgField):
+        widgetClass = BaseBooleanField._properties['widget']
+        kwargs = self.getConstructorKwargs(pfgField, widgetClass)
+        BaseBooleanField.__init__(self, **kwargs)
+
+booleanFieldFactory = Factory(BooleanField)
+
+registerFactory(booleanFieldFactory, FGBooleanField)

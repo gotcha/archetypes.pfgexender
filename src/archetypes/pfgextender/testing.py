@@ -4,6 +4,7 @@ from Products.Five import zcml
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.content.form import FormFolder
 from Products.PloneFormGen.content.fields import FGStringField
+from Products.PloneFormGen.content.fields import FGBooleanField
 
 from collective.testcaselayer import ptc as tcl_ptc
 
@@ -24,6 +25,8 @@ layer = Layer(bases=[tcl_ptc.ptc_layer])
 FORM_ID = 'birth_form'
 FIRSTNAME_ID = 'first_name'
 FIRSTNAME_TITLE = 'First Name'
+HOME_ID = 'home'
+HOME_TITLE = 'Born Home'
 
 
 def populate(portal):
@@ -33,3 +36,6 @@ def populate(portal):
     field_id = form.invokeFactory(FGStringField.portal_type, FIRSTNAME_ID)
     firstname = getattr(form, field_id)
     firstname.setTitle(FIRSTNAME_TITLE)
+    field_id = form.invokeFactory(FGBooleanField.portal_type, HOME_ID)
+    home = getattr(form, field_id)
+    home.setTitle(HOME_TITLE)
