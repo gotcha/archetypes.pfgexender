@@ -1,5 +1,7 @@
 from Testing import ZopeTestCase
 
+from zope.component import getSiteManager
+
 from Products.Five import zcml
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.content.form import FormFolder
@@ -10,6 +12,7 @@ from collective.testcaselayer import ptc as tcl_ptc
 
 from archetypes import pfgextender
 from archetypes.pfgextender.tool import TOOL_ID
+from archetypes.pfgextender.fti import registerFormAsUtility
 
 
 class Layer(tcl_ptc.BasePTCLayer):
@@ -39,3 +42,5 @@ def populate(portal):
     field_id = form.invokeFactory(FGBooleanField.portal_type, HOME_ID)
     home = getattr(form, field_id)
     home.setTitle(HOME_TITLE)
+    sm = getSiteManager(tool)
+    registerFormAsUtility(sm, form, "Birth")

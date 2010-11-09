@@ -2,7 +2,6 @@ from zope.component import queryUtility
 
 from Products.PloneFormGen.content.fieldsBase import BaseFormField
 
-from archetypes.pfgextender.interfaces import IPFGExtensible
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.fields import makeATFieldFromPFGField
 
@@ -16,9 +15,7 @@ class Extender(object):
         self.context = context
 
     def getFields(self):
-        extensible = IPFGExtensible(self.context)
-        pfgform_id = extensible.pfgform_id
-        pfgForm = queryUtility(IPFGExtenderForm, name=pfgform_id)
+        pfgForm = queryUtility(IPFGExtenderForm, name=self.context.portal_type)
         if pfgForm is None:
             return []
         pfgFields = [item for item in pfgForm.objectValues()
