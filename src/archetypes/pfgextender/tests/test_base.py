@@ -45,23 +45,45 @@ class BaseTests(PloneTestCase.PloneTestCase):
         PFGFORM_ID = 'pfgform'
         self.folder.invokeFactory(FormFolder.portal_type, PFGFORM_ID)
         self.failUnless(PFGFORM_ID in self.folder)
-        form = queryUtility(IPFGExtenderForm, PFGFORM_ID)
-        self.assertEquals(form, None)
+        form = getattr(self.folder, PFGFORM_ID)
+        self.failIf(IPFGExtenderForm.providedBy(form))
 
     def testPopulated(self):
         self.loginAsPortalOwner()
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
         self.failUnless(FORM_ID in tool)
-        form = queryUtility(IPFGExtenderForm, FORM_ID)
-        self.assertEquals(form, getattr(tool, FORM_ID))
 
     def testFormIsRegistered(self):
         self.loginAsPortalOwner()
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
-        form = queryUtility(IPFGExtenderForm, FORM_ID)
-        self.assertEquals(form, getattr(tool, FORM_ID))
+        form = getattr(tool, FORM_ID)
+        self.failUnless(IPFGExtenderForm.providedBy(form))
+        registered = queryUtility(IPFGExtenderForm, BIRTH_PORTAL_TYPE)
+        self.assertEquals(form, registered)
+
+    def testFormShouldNotBeRenamed(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getattr(self.portal, TOOL_ID)
+        # savepoint needs to be called to please CopySupport.cb_isMoveable
+        transaction.savepoint()
+        NEW_FORM_ID = 'new'
+        tool.manage_renameObject(FORM_ID, NEW_FORM_ID)
+        self.assertRaises(KeyError, queryUtility,
+            IPFGExtenderForm, BIRTH_PORTAL_TYPE)
+
+    def testTypeWithWrongRegistration(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getattr(self.portal, TOOL_ID)
+        tool.registerFormForPortalType(FORM_ID + 'x', BIRTH_PORTAL_TYPE)
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        schema = birth.Schema()
+        self.failIf(FIRSTNAME_ID in schema.keys())
+        self.failIf(HOME_ID in schema.keys())
 
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
@@ -99,17 +121,6 @@ class BaseTests(PloneTestCase.PloneTestCase):
         schema = birth.Schema()
         field = schema.getField(FIRSTNAME_ID)
         self.failUnless(isinstance(field, StringField))
-
-    def testFormIsRenamed(self):
-        self.loginAsPortalOwner()
-        populate(self.portal)
-        tool = getattr(self.portal, TOOL_ID)
-        # savepoint needs to be called to please CopySupport.cb_isMoveable
-        transaction.savepoint()
-        NEW_FORM_ID = 'new'
-        tool.manage_renameObject(FORM_ID, NEW_FORM_ID)
-        form = queryUtility(IPFGExtenderForm, NEW_FORM_ID)
-        self.assertEquals(form, getattr(tool, NEW_FORM_ID))
 
     def testViewlet(self):
         self.loginAsPortalOwner()
