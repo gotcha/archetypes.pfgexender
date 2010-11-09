@@ -17,4 +17,9 @@
 
   <include file="profiles.zcml" />
 
+  <subscriber
+    for="Products.PloneFormGen.interfaces.IPloneFormGenForm
+         zope.app.container.interfaces.IObjectAddedEvent"
+    handler=".handlers.addedForm" />
+
 </configure>

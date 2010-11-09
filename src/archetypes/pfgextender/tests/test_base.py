@@ -1,9 +1,6 @@
 import unittest
 
-from zope.component import provideUtility
-
 from Products.PloneTestCase import PloneTestCase
-from Products.PloneFormGen.interfaces import IPloneFormGenForm
 from Products.CMFCore.utils import getToolByName
 
 from archetypes.pfgextender.testing import layer
@@ -40,9 +37,6 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        tool = getToolByName(self.portal, 'pfgextender_tool')
-        pfgForm = getattr(tool, FORM_ID)
-        provideUtility(pfgForm, provides=IPloneFormGenForm)
         self.folder.invokeFactory('Document', DOCUMENT_ID)
         document = getattr(self.folder, DOCUMENT_ID)
         schema = document.Schema()
