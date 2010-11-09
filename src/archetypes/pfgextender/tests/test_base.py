@@ -11,8 +11,9 @@ PloneTestCase.setupPloneSite()
 class BaseTests(PloneTestCase.PloneTestCase):
     layer = layer
 
-    def testDummy(self):
-        self.failUnless(self.portal.pfg)
+    def testInstalled(self):
+        self.failUnless(
+            hasattr(self.portal, 'formgen_tool'))
 
 
 def test_suite():
