@@ -1,20 +1,10 @@
 from zope.component import queryUtility
 
-from Products.Archetypes.Field import TextField as BaseField
 from Products.PloneFormGen.content.fieldsBase import BaseFormField
-
-from archetypes.schemaextender.field import BaseExtensionField
 
 from archetypes.pfgextender.interfaces import IPFGExtensible
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
-
-
-class TextField(BaseExtensionField, BaseField):
-    pass
-
-
-def makeATFieldFromPFGField(pfgField):
-    return TextField(pfgField.getId())
+from archetypes.pfgextender.fields import makeATFieldFromPFGField
 
 
 class Extender(object):
@@ -31,7 +21,8 @@ class Extender(object):
         pfgForm = queryUtility(IPFGExtenderForm, name=pfgform_id)
         if pfgForm is None:
             return []
-        fields = [item for item in pfgForm.objectValues()
+        pfgFields = [item for item in pfgForm.objectValues()
             if isinstance(item, BaseFormField)]
-        return [
-            makeATFieldFromPFGField(field) for field in fields]
+        atFields = [
+            makeATFieldFromPFGField(pfgField) for pfgField in pfgFields]
+        return [atField for atField in atFields if atField is not None]
