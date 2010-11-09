@@ -5,6 +5,7 @@ from zope.component import queryUtility
 
 from Products.PloneTestCase import PloneTestCase
 from Products.CMFCore.utils import getToolByName
+from Products.PloneFormGen.tools.formGenTool import FormGenTool
 
 from archetypes.pfgextender.tool import TOOL_ID
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
@@ -24,7 +25,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
 
     def testInstalled(self):
         self.failUnless(
-            hasattr(self.portal, 'formgen_tool'))
+            hasattr(self.portal, FormGenTool.id))
         self.failUnless(
             hasattr(self.portal, TOOL_ID))
 
