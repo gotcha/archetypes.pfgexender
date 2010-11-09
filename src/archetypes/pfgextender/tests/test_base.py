@@ -1,6 +1,5 @@
 import unittest
 
-
 from Products.PloneTestCase import PloneTestCase
 
 from archetypes.pfgextender.testing import layer

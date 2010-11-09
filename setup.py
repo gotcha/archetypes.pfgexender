@@ -22,12 +22,18 @@ setup(name='archetypes.pfgextender',
       include_package_data=True,
       zip_safe=False,
       extras_require={'test': [
-          'Plone',
+          'Products.Five',
+          'Products.PloneTestCase',
           'collective.testcaselayer'], },
       install_requires=[
           'setuptools',
-          'Products.PloneFormGen',
           'archetypes.schemaextender',
+          'Products.PloneFormGen',
+          'Products.CMFCore',
+          'Products.CMFDynamicViewFTI',
+          'Products.GenericSetup',
+          'zope.dottedname',
+          'zope.interface',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
