@@ -1,8 +1,13 @@
 import unittest
+import transaction
+
+from zope.component import queryUtility
 
 from Products.PloneTestCase import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 
+from archetypes.pfgextender.tool import PFGExtenderTool
+from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
 from archetypes.pfgextender.testing import FORM_ID
@@ -37,6 +42,15 @@ class BaseTests(PloneTestCase.PloneTestCase):
         populate(self.portal)
         tool = getToolByName(self.portal, 'pfgextender_tool')
         self.failUnless(FORM_ID in tool)
+        form = queryUtility(IPFGExtenderForm, FORM_ID)
+        self.assertEquals(form, getattr(tool, FORM_ID))
+
+    def testFormIsRegistered(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getToolByName(self.portal, 'pfgextender_tool')
+        form = queryUtility(IPFGExtenderForm, FORM_ID)
+        self.assertEquals(form, getattr(tool, FORM_ID))
 
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
@@ -47,6 +61,18 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(TEXT_ID in schema.keys())
         field = schema.getField(TEXT_ID)
         self.assertEquals(field.getName(), TEXT_ID)
+
+    def testFormIsRenamed(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        TOOL_ID = PFGExtenderTool.id
+        tool = getattr(self.portal, TOOL_ID)
+        # savepoint needs to be called to please CopySupport.cb_isMoveable
+        transaction.savepoint()
+        NEW_FORM_ID = 'new'
+        tool.manage_renameObject(FORM_ID, NEW_FORM_ID)
+        form = queryUtility(IPFGExtenderForm, NEW_FORM_ID)
+        self.assertEquals(form, getattr(tool, NEW_FORM_ID))
 
 
 def test_suite():
