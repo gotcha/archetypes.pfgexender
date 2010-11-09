@@ -13,4 +13,13 @@
         />
 
   </configure>
+    
+    <browser:viewlet
+        name="pfgextender.fields"
+        for="..interfaces.IPFGExtensible"
+        manager="plone.app.layout.viewlets.interfaces.IBelowContentBody"
+        class=".viewlet.FieldsViewlet"
+        permission="zope2.View" 
+        />
+        
 </configure>

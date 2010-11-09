@@ -1,0 +1,7 @@
+<tal:fields tal:repeat="field view/getFields">
+
+  <tal:field define="mode string:view;
+                     widget_view python:here.widget(field.getName(), mode=mode, use_label=0);">
+    <metal:use_field use-macro="widget_view" />
+  </tal:field>
+</tal:fields>
