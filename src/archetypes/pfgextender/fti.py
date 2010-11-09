@@ -12,7 +12,7 @@ class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
 
     _properties = DynamicViewTypeInformation._properties + (
         {'id': 'pfgform_id', 'type': 'string', 'mode': 'w',
-          'label': 'Interface put on created instances'},)
+          'label': 'PloneFormGen Form id'},)
 
     pfgform_id = ''
     security = ClassSecurityInfo()
