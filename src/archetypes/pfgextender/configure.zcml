@@ -15,4 +15,6 @@
       global="False"
       />
 
+  <include file="profiles.zcml" />
+
 </configure>

@@ -4,6 +4,7 @@ from zope.component import provideUtility
 
 from Products.PloneTestCase import PloneTestCase
 from Products.PloneFormGen.interfaces import IPloneFormGenForm
+from Products.CMFCore.utils import getToolByName
 
 from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
@@ -22,6 +23,8 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testInstalled(self):
         self.failUnless(
             hasattr(self.portal, 'formgen_tool'))
+        self.failUnless(
+            hasattr(self.portal, 'pfgextender_tool'))
 
     def testFactory(self):
         id = self.folder.invokeFactory('Birth', 'birth')
@@ -29,12 +32,16 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(IBirth.providedBy(birth))
 
     def testPopulated(self):
-        populate(self.folder)
-        self.failUnless(FORM_ID in self.folder)
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getToolByName(self.portal, 'pfgextender_tool')
+        self.failUnless(FORM_ID in tool)
 
     def testTypeIsExtended(self):
-        populate(self.folder)
-        pfgForm = getattr(self.folder, FORM_ID)
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getToolByName(self.portal, 'pfgextender_tool')
+        pfgForm = getattr(tool, FORM_ID)
         provideUtility(pfgForm, provides=IPloneFormGenForm)
         self.folder.invokeFactory('Document', DOCUMENT_ID)
         document = getattr(self.folder, DOCUMENT_ID)
