@@ -13,7 +13,7 @@ from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
 from archetypes.pfgextender.testing import FORM_ID
-from archetypes.pfgextender.testing import TEXT_ID
+from archetypes.pfgextender.testing import FIRSTNAME_ID
 from archetypes.pfgextender.interfaces import IPFGExtensible
 
 PloneTestCase.setupPloneSite()
@@ -64,9 +64,9 @@ class BaseTests(PloneTestCase.PloneTestCase):
         id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
-        self.failUnless(TEXT_ID in schema.keys())
-        field = schema.getField(TEXT_ID)
-        self.assertEquals(field.getName(), TEXT_ID)
+        self.failUnless(FIRSTNAME_ID in schema.keys())
+        field = schema.getField(FIRSTNAME_ID)
+        self.assertEquals(field.getName(), FIRSTNAME_ID)
 
     def testFormIsRenamed(self):
         self.loginAsPortalOwner()

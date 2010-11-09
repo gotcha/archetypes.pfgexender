@@ -18,7 +18,7 @@
  <property name="view_methods">
   <element value="event_view"/>
  </property>
- <property name="pfgform_id">test_form</property>
+ <property name="pfgform_id">birth_form</property>
  <alias from="(Default)" to="(dynamic view)"/>
  <alias from="edit" to="atct_edit"/>
  <alias from="sharing" to="@@sharing"/>

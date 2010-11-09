@@ -21,14 +21,15 @@ class Layer(tcl_ptc.BasePTCLayer):
 
 layer = Layer(bases=[tcl_ptc.ptc_layer])
 
-FORM_ID = 'test_form'
-TEXT_ID = 'first_name'
+FORM_ID = 'birth_form'
+FIRSTNAME_ID = 'first_name'
+FIRSTNAME_TITLE = 'First Name'
 
 
 def populate(portal):
     tool = getToolByName(portal, TOOL_ID)
-    tool.invokeFactory(FormFolder.portal_type, FORM_ID)
-    form = getattr(tool, FORM_ID)
-    form.invokeFactory(FGTextField.portal_type, TEXT_ID)
-    text = getattr(form, TEXT_ID)
-    text.setTitle('First Name')
+    form_id = tool.invokeFactory(FormFolder.portal_type, FORM_ID)
+    form = getattr(tool, form_id)
+    field_id = form.invokeFactory(FGTextField.portal_type, FIRSTNAME_ID)
+    firstname = getattr(form, field_id)
+    firstname.setTitle(FIRSTNAME_TITLE)
