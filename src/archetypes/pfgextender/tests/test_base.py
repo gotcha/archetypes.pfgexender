@@ -9,6 +9,7 @@ from Products.PloneFormGen.tools.formGenTool import FormGenTool
 from Products.PloneFormGen.content.form import FormFolder
 
 from archetypes.pfgextender.tool import TOOL_ID
+from archetypes.pfgextender.browser.viewlet import FieldsViewlet
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
@@ -78,6 +79,17 @@ class BaseTests(PloneTestCase.PloneTestCase):
         tool.manage_renameObject(FORM_ID, NEW_FORM_ID)
         form = queryUtility(IPFGExtenderForm, NEW_FORM_ID)
         self.assertEquals(form, getattr(tool, NEW_FORM_ID))
+
+    def testViewlet(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        request = self.folder.REQUEST
+        viewlet = FieldsViewlet(birth, request, None, None)
+        viewlet.update()
+        fieldNames = [field.getName() for field in viewlet.getFields()]
+        self.failUnless(FIRSTNAME_ID in fieldNames)
 
 
 def test_suite():
