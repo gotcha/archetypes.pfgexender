@@ -9,6 +9,7 @@ from Products.CMFDynamicViewFTI.fti import DynamicViewTypeInformation
 
 from archetypes.pfgextender.interfaces import IPFGExtensible
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
+from archetypes.pfgextender.tool import TOOL_ID
 
 
 def registerFormAsUtility(sm, pfgForm, portal_type):
@@ -37,12 +38,15 @@ class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
         DynamicViewTypeInformation._setPropValue(self, id,
             value)
         if id == 'pfgform_id':
-            portal_types = getToolByName(self, 'portal_types')
-            pfgForm = portal_types.get(self.pfgform_id, None)
-            if pfgForm is not None:
-                portal_type = self.getId()
-                sm = getSiteManager(portal_types)
-                registerFormAsUtility(sm, pfgForm, portal_type)
+            self.registerFormAsUtility()
+
+    def registerFormAsUtility(self):
+        tool = getToolByName(self, TOOL_ID)
+        pfgForm = tool.get(self.pfgform_id, None)
+        if pfgForm is not None:
+            portal_type = self.getId()
+            sm = getSiteManager(tool)
+            registerFormAsUtility(sm, pfgForm, portal_type)
 
     def _constructInstance(self, container, id, *args, **kw):
         """Build a bare instance of the appropriate type."""
