@@ -31,18 +31,25 @@ def registerFactory(factory, pfgClass):
     gsm.registerUtility(factory, IFactory, factoryName)
 
 
-class TextField(BaseExtensionField, BaseTextField):
+class ExtensionField(BaseExtensionField):
+
+    def getConstructorKwargs(self, pfgField, widgetClass):
+        kwargs = dict()
+        kwargs['label'] = pfgField.Title()
+        kwargs['description'] = pfgField.Description()
+        widget = widgetClass(**kwargs)
+        kwargs = dict()
+        kwargs['name'] = pfgField.getId()
+        kwargs['widget'] = widget
+        return kwargs
+
+
+class TextField(ExtensionField, BaseTextField):
 
     def __init__(self, pfgField):
-        descriptor = dict()
-        descriptor['label'] = pfgField.Title()
-        descriptor['description'] = pfgField.Description()
         widgetClass = BaseTextField._properties['widget']
-        widget = widgetClass(**descriptor)
-        descriptor = dict()
-        descriptor['name'] = pfgField.getId()
-        descriptor['widget'] = widget
-        BaseTextField.__init__(self, **descriptor)
+        kwargs = self.getConstructorKwargs(pfgField, widgetClass)
+        BaseTextField.__init__(self, **kwargs)
 
 
 textFieldFactory = Factory(TextField)
