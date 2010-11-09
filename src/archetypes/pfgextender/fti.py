@@ -1,7 +1,7 @@
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
-from zope.interface import Interface
+from zope.interface.interfaces import IInterface
 from zope.interface import alsoProvides
 from zope.dottedname.resolve import resolve
 
@@ -22,8 +22,10 @@ class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
             return None
         else:
             interface = resolve(self.marking_interface)
-            if not isinstance(Interface, interface):
-                raise TypeError("Marking is not an Interface")
+            if not IInterface.providedBy(interface):
+                raise TypeError(
+                    "Object resolved from [%s] is not an Interface" %
+                    self.marking_interface)
             return interface
 
     security.declarePrivate('_constructInstance')
@@ -32,9 +34,9 @@ class MarkingFactoryTypeInformation(DynamicViewTypeInformation):
         """Build a bare instance of the appropriate type."""
         new_ob = super(MarkingFactoryTypeInformation, self)._constructInstance(
             container, id, *args, **kw)
-        interface = self.getMarkingInterface()
-        if interface is not None:
-            alsoProvides(new_ob, interface)
+        marking_interface = self.getMarkingInterface()
+        if marking_interface is not None:
+            alsoProvides(new_ob, marking_interface)
         return new_ob
 
 InitializeClass(MarkingFactoryTypeInformation)
