@@ -22,6 +22,11 @@
          zope.app.container.interfaces.IObjectAddedEvent"
     handler=".handlers.addedForm" />
 
+  <subscriber
+    for="archetypes.pfgextender.interfaces.IPFGExtenderForm
+         zope.app.container.interfaces.IObjectMovedEvent"
+    handler=".handlers.movedForm" />
+
   <adapter 
       for=".interfaces.IPFGExtensible"
       provides="archetypes.schemaextender.interfaces.ISchemaExtender"
