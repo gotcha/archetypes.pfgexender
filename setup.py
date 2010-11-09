@@ -22,6 +22,7 @@ setup(name='archetypes.pfgextender',
       include_package_data=True,
       zip_safe=False,
       extras_require={'test': [
+          'Plone',
           'Products.Five',
           'Products.PloneTestCase',
           'collective.testcaselayer'], },
