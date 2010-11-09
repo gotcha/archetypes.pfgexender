@@ -2,6 +2,8 @@ from Testing import ZopeTestCase
 
 from Products.Five import zcml
 from Products.CMFCore.utils import getToolByName
+from Products.PloneFormGen.content.form import FormFolder
+from Products.PloneFormGen.content.fields import FGTextField
 
 from collective.testcaselayer import ptc as tcl_ptc
 
@@ -25,8 +27,8 @@ TEXT_ID = 'first_name'
 
 def populate(portal):
     tool = getToolByName(portal, TOOL_ID)
-    tool.invokeFactory('FormFolder', FORM_ID)
+    tool.invokeFactory(FormFolder.portal_type, FORM_ID)
     form = getattr(tool, FORM_ID)
-    form.invokeFactory('FormTextField', TEXT_ID)
+    form.invokeFactory(FGTextField.portal_type, TEXT_ID)
     text = getattr(form, TEXT_ID)
     text.setTitle('First Name')
