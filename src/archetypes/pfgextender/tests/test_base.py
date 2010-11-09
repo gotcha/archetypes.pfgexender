@@ -6,6 +6,7 @@ from zope.component import queryUtility
 from Products.PloneTestCase import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.tools.formGenTool import FormGenTool
+from Products.PloneFormGen.content.form import FormFolder
 
 from archetypes.pfgextender.tool import TOOL_ID
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
@@ -17,7 +18,8 @@ from archetypes.pfgextender.interfaces import IPFGExtensible
 
 PloneTestCase.setupPloneSite()
 
-DOCUMENT_ID = 'document'
+BIRTH_PORTAL_TYPE = 'Birth'
+BIRTH_ID = 'birth'
 
 
 class BaseTests(PloneTestCase.PloneTestCase):
@@ -30,13 +32,16 @@ class BaseTests(PloneTestCase.PloneTestCase):
             hasattr(self.portal, TOOL_ID))
 
     def testFactory(self):
-        id = self.folder.invokeFactory('Birth', 'birth')
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         self.failUnless(IPFGExtensible.providedBy(birth))
 
-    def testNoHandlerImpact(self):
-        self.folder.invokeFactory('FormFolder', 'form')
-        self.failUnless('form' in self.folder)
+    def testNoImpactOfHandlerOutsideTool(self):
+        PFGFORM_ID = 'pfgform'
+        self.folder.invokeFactory(FormFolder.portal_type, PFGFORM_ID)
+        self.failUnless(PFGFORM_ID in self.folder)
+        form = queryUtility(IPFGExtenderForm, PFGFORM_ID)
+        self.assertEquals(form, None)
 
     def testPopulated(self):
         self.loginAsPortalOwner()
@@ -56,9 +61,9 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        self.folder.invokeFactory('Birth', DOCUMENT_ID)
-        document = getattr(self.folder, DOCUMENT_ID)
-        schema = document.Schema()
+        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        schema = birth.Schema()
         self.failUnless(TEXT_ID in schema.keys())
         field = schema.getField(TEXT_ID)
         self.assertEquals(field.getName(), TEXT_ID)
