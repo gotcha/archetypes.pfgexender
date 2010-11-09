@@ -4,3 +4,5 @@ parts/
 var/
 .session.vim
 tags
+coverage
+.mr.developer.cfg
