@@ -6,6 +6,7 @@ from Products.CMFCore.utils import getToolByName
 from collective.testcaselayer import ptc as tcl_ptc
 
 from archetypes import pfgextender
+from archetypes.pfgextender.tool import TOOL_ID
 
 
 class Layer(tcl_ptc.BasePTCLayer):
@@ -23,7 +24,7 @@ TEXT_ID = 'first_name'
 
 
 def populate(portal):
-    tool = getToolByName(portal, 'pfgextender_tool')
+    tool = getToolByName(portal, TOOL_ID)
     tool.invokeFactory('FormFolder', FORM_ID)
     form = getattr(tool, FORM_ID)
     form.invokeFactory('FormTextField', TEXT_ID)

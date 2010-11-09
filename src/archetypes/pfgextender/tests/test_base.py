@@ -6,7 +6,7 @@ from zope.component import queryUtility
 from Products.PloneTestCase import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 
-from archetypes.pfgextender.tool import PFGExtenderTool
+from archetypes.pfgextender.tool import TOOL_ID
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.testing import layer
 from archetypes.pfgextender.testing import populate
@@ -26,7 +26,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(
             hasattr(self.portal, 'formgen_tool'))
         self.failUnless(
-            hasattr(self.portal, 'pfgextender_tool'))
+            hasattr(self.portal, TOOL_ID))
 
     def testFactory(self):
         id = self.folder.invokeFactory('Birth', 'birth')
@@ -40,7 +40,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testPopulated(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        tool = getToolByName(self.portal, 'pfgextender_tool')
+        tool = getToolByName(self.portal, TOOL_ID)
         self.failUnless(FORM_ID in tool)
         form = queryUtility(IPFGExtenderForm, FORM_ID)
         self.assertEquals(form, getattr(tool, FORM_ID))
@@ -48,7 +48,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testFormIsRegistered(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        tool = getToolByName(self.portal, 'pfgextender_tool')
+        tool = getToolByName(self.portal, TOOL_ID)
         form = queryUtility(IPFGExtenderForm, FORM_ID)
         self.assertEquals(form, getattr(tool, FORM_ID))
 
@@ -65,7 +65,6 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testFormIsRenamed(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        TOOL_ID = PFGExtenderTool.id
         tool = getattr(self.portal, TOOL_ID)
         # savepoint needs to be called to please CopySupport.cb_isMoveable
         transaction.savepoint()
