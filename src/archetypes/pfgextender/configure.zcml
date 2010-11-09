@@ -19,13 +19,13 @@
 
   <subscriber
     for="Products.PloneFormGen.interfaces.IPloneFormGenForm
-         zope.app.container.interfaces.IObjectAddedEvent"
-    handler=".handlers.addedForm" />
+         zope.app.container.interfaces.IObjectMovedEvent"
+    handler=".handlers.movedPloneFormGenForm" />
 
   <subscriber
     for="archetypes.pfgextender.interfaces.IPFGExtenderForm
          zope.app.container.interfaces.IObjectMovedEvent"
-    handler=".handlers.movedForm" />
+    handler=".handlers.movedPFGExtenderForm" />
 
   <adapter 
       for=".interfaces.IPFGExtensible"

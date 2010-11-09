@@ -5,24 +5,21 @@ from archetypes.pfgextender.tool import PFGExtenderTool
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 
 
-def addedForm(obj, event):
+def movedPloneFormGenForm(obj, event):
     """registered for IPloneFormGenForm
     """
-    parent = event.newParent
-    if isinstance(parent, PFGExtenderTool):
-        alsoProvides(obj, IPFGExtenderForm)
+    if isinstance(event.newParent, PFGExtenderTool):
         sm = getSiteManager(obj)
-        sm.registerUtility(obj, provided=IPFGExtenderForm, name=obj.getId())
+        alsoProvides(obj, IPFGExtenderForm)
+        sm.registerUtility(obj, provided=IPFGExtenderForm, name=event.newName)
 
 
-def movedForm(obj, event):
+def movedPFGExtenderForm(obj, event):
     """registered for IPFGExtenderForm
     """
-    parent = event.oldParent
     sm = getSiteManager(obj)
-    if isinstance(parent, PFGExtenderTool):
+    if isinstance(event.oldParent, PFGExtenderTool):
         sm.unregisterUtility(obj, provided=IPFGExtenderForm,
             name=event.oldName)
-    parent = event.newParent
-    if isinstance(parent, PFGExtenderTool):
+    if isinstance(event.newParent, PFGExtenderTool):
         sm.registerUtility(obj, provided=IPFGExtenderForm, name=event.newName)
