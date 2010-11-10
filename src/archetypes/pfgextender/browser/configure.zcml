@@ -3,17 +3,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="archetypes.pfgextender">
 
-  <configure package="Products.GenericSetup.browser">
-    <browser:page
-        for="zope.app.container.interfaces.IAdding"
-        name="addMarkingFactoryTypeInformation.html"
-        template="addWithPresettings.pt"
-        class="archetypes.pfgextender.browser.typeinfo.MarkingFactoryTypeInformationAddView"
-        permission="cmf.ManagePortal"
-        />
-
-  </configure>
-    
     <browser:viewlet
         name="pfgextender.fields"
         for="..interfaces.IPFGExtensible"

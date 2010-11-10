@@ -1,7 +1,9 @@
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
+from zope.component import getSiteManager
 
 from archetypes.pfgextender.tool import PFGExtenderTool
+from archetypes.pfgextender.interfaces import IPFGExtensible
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 
 
@@ -17,3 +19,13 @@ def movedPFGExtenderForm(obj, event):
     """
     if not isinstance(event.newParent, PFGExtenderTool):
         noLongerProvides(obj, IPFGExtenderForm)
+
+
+def markExtensible(obj, event):
+    """registered for IBaseObject
+    """
+    portal_type = obj.portal_type
+    sm = getSiteManager(obj)
+    extender = sm.queryUtility(IPFGExtenderForm, name=portal_type)
+    if extender is not None:
+        alsoProvides(obj, IPFGExtensible)

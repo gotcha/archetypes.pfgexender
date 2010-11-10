@@ -7,14 +7,6 @@
   <include package="archetypes.schemaextender" />
   <include package=".browser" />
 
-  <five:registerClass
-      class=".fti.MarkingFactoryTypeInformation"
-      meta_type="Marking Factory-based Type Information"
-      addview="addMarkingFactoryTypeInformation.html"
-      permission="cmf.ManagePortal"
-      global="False"
-      />
-
   <include file="profiles.zcml" />
 
   <subscriber
@@ -26,6 +18,11 @@
     for="archetypes.pfgextender.interfaces.IPFGExtenderForm
          zope.app.container.interfaces.IObjectMovedEvent"
     handler=".handlers.movedPFGExtenderForm" />
+
+  <subscriber
+    for="Products.Archetypes.interfaces.IBaseObject
+         zope.app.container.interfaces.IObjectAddedEvent"
+    handler=".handlers.markExtensible" />
 
   <adapter 
       for=".interfaces.IPFGExtensible"

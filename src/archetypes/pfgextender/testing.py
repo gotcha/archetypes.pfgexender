@@ -39,4 +39,4 @@ def populate(portal):
     field_id = form.invokeFactory(FGBooleanField.portal_type, HOME_ID)
     home = getattr(form, field_id)
     home.setTitle(HOME_TITLE)
-    tool.registerFormForPortalType(form_id, "Birth")
+    tool.registerFormForPortalType(form_id, "Event")

@@ -23,7 +23,7 @@ from archetypes.pfgextender.interfaces import IPFGExtensible
 
 PloneTestCase.setupPloneSite()
 
-BIRTH_PORTAL_TYPE = 'Birth'
+EVENT_PORTAL_TYPE = 'Event'
 BIRTH_ID = 'birth'
 
 
@@ -37,7 +37,9 @@ class BaseTests(PloneTestCase.PloneTestCase):
             hasattr(self.portal, TOOL_ID))
 
     def testFactory(self):
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         self.failUnless(IPFGExtensible.providedBy(birth))
 
@@ -60,7 +62,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         tool = getToolByName(self.portal, TOOL_ID)
         form = getattr(tool, FORM_ID)
         self.failUnless(IPFGExtenderForm.providedBy(form))
-        registered = queryUtility(IPFGExtenderForm, BIRTH_PORTAL_TYPE)
+        registered = queryUtility(IPFGExtenderForm, EVENT_PORTAL_TYPE)
         self.assertEquals(form, registered)
 
     def testFormShouldNotBeRenamed(self):
@@ -72,14 +74,14 @@ class BaseTests(PloneTestCase.PloneTestCase):
         NEW_FORM_ID = 'new'
         tool.manage_renameObject(FORM_ID, NEW_FORM_ID)
         self.assertRaises(KeyError, queryUtility,
-            IPFGExtenderForm, BIRTH_PORTAL_TYPE)
+            IPFGExtenderForm, EVENT_PORTAL_TYPE)
 
     def testTypeWithWrongRegistration(self):
         self.loginAsPortalOwner()
         populate(self.portal)
         tool = getattr(self.portal, TOOL_ID)
-        tool.registerFormForPortalType(FORM_ID + 'x', BIRTH_PORTAL_TYPE)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        tool.registerFormForPortalType(FORM_ID + 'x', EVENT_PORTAL_TYPE)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         self.failIf(FIRSTNAME_ID in schema.keys())
@@ -88,7 +90,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testTypeIsExtended(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         self.failUnless(FIRSTNAME_ID in schema.keys())
@@ -97,7 +99,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testFieldsAreWellConstructed(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         field = schema.getField(FIRSTNAME_ID)
@@ -107,7 +109,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testBooleanField(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         field = schema.getField(HOME_ID)
@@ -116,7 +118,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testStringField(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         schema = birth.Schema()
         field = schema.getField(FIRSTNAME_ID)
@@ -125,7 +127,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
     def testViewlet(self):
         self.loginAsPortalOwner()
         populate(self.portal)
-        id = self.folder.invokeFactory(BIRTH_PORTAL_TYPE, BIRTH_ID)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         request = self.folder.REQUEST
         viewlet = FieldsViewlet(birth, request, None, None)
