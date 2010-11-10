@@ -1,40 +1,30 @@
 <?xml version="1.0"?>
-<object name="Folder" meta_type="Factory-based Type Information"
+<object name="Folder" meta_type="Factory-based Type Information with dynamic views"
    i18n:domain="cmf_default" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  <property name="title" i18n:translate="">Folder</property>
  <property name="description"
     i18n:translate="">Use folders to put content in categories.</property>
  <property name="content_icon">folder_icon.gif</property>
- <property name="content_meta_type">PFGExtender Tool</property>
+ <property name="content_meta_type">PFGExtender</property>
  <property name="product"></property>
  <property name="factory">cmf.folder</property>
- <property name="immediate_view">folder_edit_form</property>
+ <property name="immediate_view">folder_contents</property>
  <property name="global_allow">False</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types">
   <element value="FormFolder"/>
  </property>
  <property name="allow_discussion">False</property>
- <alias from="(Default)" to="index_html"/>
- <alias from="index.html" to="index_html"/>
- <alias from="view" to="index_html"/>
+ <property name="default_view">folder_contents</property>
+ <property name="view_methods">
+  <element value="folder_contents"/>
+ </property>
+ <alias from="(Default)" to="folder_contents"/>
+ <alias from="sharing" to="@@sharing"/>
+ <alias from="view" to="(selected layout)"/>
  <action title="View" action_id="view" category="object" condition_expr=""
     url_expr="string:${object_url}" visible="True">
   <permission value="View"/>
- </action>
- <action title="Edit" action_id="edit" category="object" condition_expr=""
-    url_expr="string:${object_url}/folder_edit_form" visible="True">
-  <permission value="Manage properties"/>
- </action>
- <action title="Local Roles" action_id="localroles" category="object"
-    condition_expr="" url_expr="string:${object_url}/folder_localrole_form"
-    visible="True">
-  <permission value="Change local roles"/>
- </action>
- <action title="Folder contents" action_id="folderContents" category="object"
-    condition_expr="" url_expr="string:${object_url}/folder_contents"
-    visible="True">
-  <permission value="List folder contents"/>
  </action>
  <action title="New..." action_id="new" category="object" condition_expr=""
     url_expr="string:${object_url}/folder_factories" visible="False">

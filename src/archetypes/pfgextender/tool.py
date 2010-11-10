@@ -32,6 +32,8 @@ class PFGExtenderTool(UniqueObject, PortalFolder):
     plone_tool = True
     security = ClassSecurityInfo()
 
+    displayContentsTab = False
+
     allowed_types = [FormFolder.portal_type]
 
     def registerFormForPortalType(self, form_id, portal_type):
