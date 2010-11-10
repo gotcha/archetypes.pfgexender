@@ -34,6 +34,12 @@ def registerFactory(factory, pfgClass):
 
 
 class ExtensionField(BaseExtensionField):
+    """base class for fields created from PFG fields"""
+
+    def instantiate(self, pfgField, ATFieldClass):
+        widgetClass = ATFieldClass._properties['widget']
+        kwargs = self.getConstructorKwargs(pfgField, widgetClass)
+        ATFieldClass.__init__(self, **kwargs)
 
     def getConstructorKwargs(self, pfgField, widgetClass):
         kwargs = dict()
@@ -49,23 +55,17 @@ class ExtensionField(BaseExtensionField):
 class StringField(ExtensionField, BaseStringField):
 
     def __init__(self, pfgField):
-        widgetClass = BaseStringField._properties['widget']
-        kwargs = self.getConstructorKwargs(pfgField, widgetClass)
-        BaseStringField.__init__(self, **kwargs)
+        self.instantiate(pfgField, BaseStringField)
 
 
 stringFieldFactory = Factory(StringField)
-
 registerFactory(stringFieldFactory, FGStringField)
 
 
 class BooleanField(ExtensionField, BaseBooleanField):
 
     def __init__(self, pfgField):
-        widgetClass = BaseBooleanField._properties['widget']
-        kwargs = self.getConstructorKwargs(pfgField, widgetClass)
-        BaseBooleanField.__init__(self, **kwargs)
+        self.instantiate(pfgField, BaseBooleanField)
 
 booleanFieldFactory = Factory(BooleanField)
-
 registerFactory(booleanFieldFactory, FGBooleanField)
