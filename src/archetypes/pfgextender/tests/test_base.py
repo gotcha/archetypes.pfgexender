@@ -36,13 +36,6 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(
             hasattr(self.portal, TOOL_ID))
 
-    def testFactory(self):
-        self.loginAsPortalOwner()
-        populate(self.portal)
-        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
-        birth = getattr(self.folder, id)
-        self.failUnless(IPFGExtensible.providedBy(birth))
-
     def testNoImpactOfHandlerOutsideTool(self):
         PFGFORM_ID = 'pfgform'
         self.folder.invokeFactory(FormFolder.portal_type, PFGFORM_ID)
@@ -55,6 +48,30 @@ class BaseTests(PloneTestCase.PloneTestCase):
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
         self.failUnless(FORM_ID in tool)
+
+    def testFactory(self):
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        self.failUnless(IPFGExtensible.providedBy(birth))
+
+    def testOldContentMadeExtensible(self):
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        self.failIf(IPFGExtensible.providedBy(birth))
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        self.failUnless(IPFGExtensible.providedBy(birth))
+
+    def testOldContentNoLongerExtensible(self):
+        id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
+        birth = getattr(self.folder, id)
+        self.loginAsPortalOwner()
+        populate(self.portal)
+        tool = getToolByName(self.portal, TOOL_ID)
+        tool.resetFormForPortalType(EVENT_PORTAL_TYPE)
+        self.failIf(IPFGExtensible.providedBy(birth))
 
     def testFormIsRegistered(self):
         self.loginAsPortalOwner()

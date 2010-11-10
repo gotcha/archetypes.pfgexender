@@ -22,7 +22,7 @@
   <subscriber
     for="Products.Archetypes.interfaces.IBaseObject
          zope.app.container.interfaces.IObjectAddedEvent"
-    handler=".handlers.markExtensible" />
+    handler=".handlers.madeExtensible" />
 
   <adapter 
       for=".interfaces.IPFGExtensible"
