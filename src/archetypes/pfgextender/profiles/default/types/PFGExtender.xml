@@ -6,7 +6,7 @@
     i18n:translate="">Use folders to put content in categories.</property>
  <property name="content_icon">folder_icon.gif</property>
  <property name="content_meta_type">PFGExtender</property>
- <property name="product">archetypes.pfgextender</property>
+ <property name="product"></property>
  <property name="factory">cmf.folder</property>
  <property name="immediate_view">folder_contents</property>
  <property name="global_allow">False</property>

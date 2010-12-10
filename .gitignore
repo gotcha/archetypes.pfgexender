@@ -6,3 +6,4 @@ var/
 tags
 coverage
 .mr.developer.cfg
+*.mo
