@@ -11,4 +11,11 @@
         permission="zope2.View" 
         />
         
+  <browser:page
+      name="pfgextender-controlpanel"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".configlet.TypesControlPanel"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
