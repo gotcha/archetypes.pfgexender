@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 from zope.i18n import translate
@@ -10,6 +8,8 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
 from plone.app.controlpanel.form import ControlPanelView
+
+from archetypes.pfgextender.tool import TOOL_ID
 
 
 class TypesControlPanel(ControlPanelView):
@@ -37,11 +37,9 @@ class TypesControlPanel(ControlPanelView):
         """Perform the update and redirect if necessary, or render the page
         """
         postback = True
-        context = aq_inner(self.context)
 
         form = self.request.form
         submitted = form.get('form.submitted', False)
-        save_button = form.get('form.button.Save', None) is not None
         cancel_button = form.get('form.button.Cancel', None) is not None
         type_id = form.get('old_type_id', None)
 
@@ -77,6 +75,15 @@ class TypesControlPanel(ControlPanelView):
             return v['title']
         types.sort(key=_key)
         return types
+
+    def get_forms(self):
+        portal_pfgextender = getToolByName(self.context, TOOL_ID)
+        result = []
+        for form_id in portal_pfgextender.objectIds():
+            form = getattr(portal_pfgextender, form_id)
+            title = form.Title()
+            result.append(dict(id=form_id, title=title))
+        return result
 
     def selected_type_title(self):
         return self.fti.Title()

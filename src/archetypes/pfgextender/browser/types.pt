@@ -14,7 +14,7 @@
 <div metal:fill-slot="prefs_configlet_main">
 
     <h1 class="documentFirstHeading"
-        i18n:translate="heading_type_settings">Type Settings</h1>
+        i18n:translate="heading_types_extensions_settings">Types Extensions</h1>
 
     <a href=""
         class="link-parent"
@@ -23,13 +23,13 @@
             Up to Site Setup
     </a>
 
-    <p i18n:translate="description_types_setup">
-        Workflow, visibility and versioning settings for your content types.
+    <p i18n:translate="description_types_extensions_setup">
+      Select a form (set of fields) used to extend a content type.
     </p>
     
     <form method="post" 
           tal:define="type_id view/type_id"
-          tal:attributes="action string:${context/absolute_url}/@@types-controlpanel">
+          tal:attributes="action string:${context/absolute_url}/@@pfgextender-controlpanel">
 
         <input type="hidden" name="form.submitted:boolean" value="True" />
         <input type="hidden" name="old_type_id" tal:attributes="value type_id" />
@@ -65,6 +65,11 @@
                </p>
 
                <div class="field">
+                  <select name="form_id">
+                    <option tal:repeat="form view/get_forms"
+                            tal:attributes="value form/id"
+                            tal:content="form/title">Title</option>
+                  </select>
                </div>
 
                <div class="field">
