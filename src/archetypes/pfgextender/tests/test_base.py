@@ -1,9 +1,10 @@
-import unittest
+import unittest2 as unittest
 import transaction
 
 from zope.component import queryUtility
 
-from Products.PloneTestCase import PloneTestCase
+from plone.app.bbb_testing import plonetestcasecompat
+
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.tools.formGenTool import FormGenTool
 from Products.PloneFormGen.content.form import FormFolder
@@ -13,7 +14,7 @@ from Products.Archetypes.Field import BooleanField
 from archetypes.pfgextender.tool import TOOL_ID
 from archetypes.pfgextender.browser.viewlet import FieldsViewlet
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
-from archetypes.pfgextender.testing import layer
+from archetypes.pfgextender.testing import PFGEXTENDER_INTEGRATION
 from archetypes.pfgextender.testing import populate
 from archetypes.pfgextender.testing import FORM_ID
 from archetypes.pfgextender.testing import FIRSTNAME_ID
@@ -21,20 +22,22 @@ from archetypes.pfgextender.testing import FIRSTNAME_TITLE
 from archetypes.pfgextender.testing import HOME_ID
 from archetypes.pfgextender.interfaces import IPFGExtensible
 
-PloneTestCase.setupPloneSite()
-
 EVENT_PORTAL_TYPE = 'Event'
 BIRTH_ID = 'birth'
 
 
-class BaseTests(PloneTestCase.PloneTestCase):
-    layer = layer
+class BaseTests(plonetestcasecompat.PTCCompatTestCase):
+    layer = PFGEXTENDER_INTEGRATION
 
     def testInstalled(self):
         self.failUnless(
             hasattr(self.portal, FormGenTool.id))
         self.failUnless(
             hasattr(self.portal, TOOL_ID))
+
+    def loginAsManager(self):
+        self.setRoles(['Manager'])
+        self.login()
 
     def testNoImpactOfHandlerOutsideTool(self):
         PFGFORM_ID = 'pfgform'
@@ -44,13 +47,13 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failIf(IPFGExtenderForm.providedBy(form))
 
     def testPopulated(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
         self.failUnless(FORM_ID in tool)
 
     def testFactory(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
@@ -60,21 +63,21 @@ class BaseTests(PloneTestCase.PloneTestCase):
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
         self.failIf(IPFGExtensible.providedBy(birth))
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         self.failUnless(IPFGExtensible.providedBy(birth))
 
     def testOldContentNoLongerExtensible(self):
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
         tool.resetFormForPortalType(EVENT_PORTAL_TYPE)
         self.failIf(IPFGExtensible.providedBy(birth))
 
     def testFormIsRegistered(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         tool = getToolByName(self.portal, TOOL_ID)
         form = getattr(tool, FORM_ID)
@@ -83,7 +86,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.assertEquals(form, registered)
 
     def testFormShouldNotBeRenamed(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         tool = getattr(self.portal, TOOL_ID)
         # savepoint needs to be called to please CopySupport.cb_isMoveable
@@ -94,7 +97,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
             IPFGExtenderForm, EVENT_PORTAL_TYPE)
 
     def testTypeWithWrongRegistration(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         tool = getattr(self.portal, TOOL_ID)
         tool.registerFormForPortalType(FORM_ID + 'x', EVENT_PORTAL_TYPE)
@@ -105,7 +108,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failIf(HOME_ID in schema.keys())
 
     def testTypeIsExtended(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
@@ -114,7 +117,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(HOME_ID in schema.keys())
 
     def testFieldsAreWellConstructed(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
@@ -124,7 +127,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.assertEquals(field.widget.label, FIRSTNAME_TITLE)
 
     def testBooleanField(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
@@ -133,7 +136,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(isinstance(field, BooleanField))
 
     def testStringField(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)
@@ -142,7 +145,7 @@ class BaseTests(PloneTestCase.PloneTestCase):
         self.failUnless(isinstance(field, StringField))
 
     def testViewlet(self):
-        self.loginAsPortalOwner()
+        self.loginAsManager()
         populate(self.portal)
         id = self.folder.invokeFactory(EVENT_PORTAL_TYPE, BIRTH_ID)
         birth = getattr(self.folder, id)

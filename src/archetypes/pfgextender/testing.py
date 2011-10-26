@@ -1,26 +1,28 @@
-from Testing import ZopeTestCase
-
-from Products.Five import zcml
 from Products.CMFCore.utils import getToolByName
 from Products.PloneFormGen.content.form import FormFolder
 from Products.PloneFormGen.content.fields import FGStringField
 from Products.PloneFormGen.content.fields import FGBooleanField
 
-from collective.testcaselayer import ptc as tcl_ptc
+from plone.app.testing import PloneWithPackageLayer
+from plone.app.testing import IntegrationTesting, FunctionalTesting
 
 from archetypes import pfgextender
 from archetypes.pfgextender.tool import TOOL_ID
 
 
-class Layer(tcl_ptc.BasePTCLayer):
+PFGEXTENDER = PloneWithPackageLayer(
+    zcml_filename="testing.zcml",
+    zcml_package=pfgextender,
+    gs_profile_id='archetypes.pfgextender:testing',
+    additional_z2_products=('Products.PloneFormGen',),
+    name="PFGEXTENDER")
 
-    def afterSetUp(self):
-        ZopeTestCase.installProduct('PloneFormGen')
-        zcml.load_config('testing.zcml', package=pfgextender)
-        self.addProfile('archetypes.pfgextender:testing')
+PFGEXTENDER_INTEGRATION = IntegrationTesting(
+    bases=(PFGEXTENDER,), name="PFGEXTENDER_INTEGRATION")
 
+PFGEXTENDER_FUNCTIONAL = FunctionalTesting(
+    bases=(PFGEXTENDER,), name="PFGEXTENDER_FUNCTIONAL")
 
-layer = Layer(bases=[tcl_ptc.ptc_layer])
 
 FORM_ID = 'birth_form'
 FIRSTNAME_ID = 'first_name'
