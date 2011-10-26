@@ -1,4 +1,6 @@
 bin/
+lib/
+include/
 develop-eggs/
 parts/
 var/
@@ -7,3 +9,4 @@ tags
 coverage
 .mr.developer.cfg
 *.mo
+src/plone.*
