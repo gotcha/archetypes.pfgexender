@@ -11,7 +11,7 @@
  <property name="product">archetypes.pfgextender</property>
  <property name="factory">addExtFormFolder</property>
  <property name="immediate_view">fg_base_view_p3</property>
- <property name="global_allow">True</property>
+ <property name="global_allow">False</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types" purge="False">
   <!-- 
