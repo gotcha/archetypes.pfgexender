@@ -12,6 +12,8 @@ class ExtFormFolder(FormFolder):
     portal_type = 'ExtFormFolder'
     archetype_name = 'Extension Form Folder'
 
+    displayContentsTab = True
+
     def initializeArchetype(self, **kwargs):
         ATFolder.initializeArchetype(self, **kwargs)
 

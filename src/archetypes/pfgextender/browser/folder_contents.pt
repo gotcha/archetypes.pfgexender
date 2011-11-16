@@ -4,7 +4,7 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xml:lang="en" lang="en"
       i18n:domain="plone"
-      metal:use-macro="here/main_template/macros/master">
+      metal:use-macro="here/prefs_main_template/macros/master">
 
   <head>
       <metal:block fill-slot="top_slot">
@@ -15,28 +15,23 @@
 
   <body>
 
-      <metal:content fill-slot="content">
+      <metal:content fill-slot="prefs_configlet_main">
         <div metal:use-macro="context/global_statusmessage/macros/portal_message">
           Portal status message
         </div>
-        <div tal:define="show_border context/@@plone/showEditableBorder"
-             tal:attributes="class python:show_border and 'documentEditable' or ''">
 
-          <div id="edit-bar"
-               tal:condition="show_border"
-               tal:content="structure provider:plone.contentviews" />
-
-          <h1 class="documentFirstHeading"> 
-              <tal:block condition="exists:here/aq_explicit/widget">
-                  <metal:field use-macro="python:here.widget('title', mode='view')">
-                  Title
-                  </metal:field>
-              </tal:block>
-              <tal:block condition="not:exists:here/aq_explicit/widget">
-                  <span tal:content="view/title" tal:omit-tag="">Directory Id</span>
-              </tal:block>
-          </h1>        
+        <h1 class="documentFirstHeading" 
+            i18n:translate=""
+            i18n:domain="pfgextender">Extension forms</h1>
       
+    <a href=""
+        class="link-parent"
+        tal:attributes="href string:$portal_url/plone_control_panel"
+        i18n:domain="plone"
+        i18n:translate="label_up_to_plone_setup">
+            Up to Site Setup
+    </a>
+
           <form name="folderContentsForm"
                 method="post"
                 action="folder_object"
@@ -45,7 +40,6 @@
             <div tal:replace="structure view/contents_table"></div>
             <input tal:replace="structure context/@@authenticator/authenticator" />
           </form>
-        </div>
       </metal:content>
       
   </body>
