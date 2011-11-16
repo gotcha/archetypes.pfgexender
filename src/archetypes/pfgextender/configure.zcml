@@ -7,6 +7,9 @@
   <include package="Products.CMFCore" />
   <include package="Products.PloneFormGen" />
   <include package="archetypes.schemaextender" />
+
+  <five:registerPackage package="." initialize=".initialize" />
+
   <include package=".browser" />
 
   <include file="profiles.zcml" />
