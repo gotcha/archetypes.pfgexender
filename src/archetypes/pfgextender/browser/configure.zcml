@@ -11,11 +11,18 @@
         permission="zope2.View" 
         />
         
-  <browser:page
-      name="pfgextender-controlpanel"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      class=".configlet.TypesControlPanel"
-      permission="cmf.ManagePortal"
-      />
+    <browser:page
+        name="pfgextender-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".configlet.TypesControlPanel"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="..tool.PFGExtenderTool"
+        class="plone.app.content.browser.foldercontents.FolderContentsView"
+        name="folder_contents"
+        template="folder_contents.pt"
+        permission="cmf.ListFolderContents" />
 
 </configure>
