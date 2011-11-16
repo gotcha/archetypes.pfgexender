@@ -25,4 +25,12 @@
         template="folder_contents.pt"
         permission="cmf.ListFolderContents" />
 
+    <browser:viewlet
+        name="plone.contentviews"
+        manager="plone.app.layout.viewlets.interfaces.IContentViews"
+        for="..tool.PFGExtenderTool"
+        class=".contentviews.ContentViewsViewlet"
+        permission="zope2.View"
+        />
+
 </configure>
