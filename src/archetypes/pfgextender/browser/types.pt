@@ -6,9 +6,6 @@
       metal:use-macro="context/prefs_main_template/macros/master"
       i18n:domain="pfgextender">
 
-<metal:block metal:fill-slot="top_slot"
-             tal:define="dummy python:request.set('disable_border', 1)" />
-
 <body>
 
 <div metal:fill-slot="prefs_configlet_main">
@@ -104,6 +101,9 @@
         </fieldset>
     
     </form>
+
+    <p><a tal:attributes="href string:$portal_url/portal_pfgextender/folder_contents"
+          i18n:translate="">Extension forms</a></p>
 
 </div>
 
