@@ -6,13 +6,6 @@
       i18n:domain="plone"
       metal:use-macro="here/prefs_main_template/macros/master">
 
-  <head>
-      <metal:block fill-slot="top_slot">
-        <tal:insert tal:replace="nothing"
-              tal:define="dummy python:request.set('enable_border', 1)" />
-      </metal:block>
-  </head>
-
   <body>
 
       <metal:content fill-slot="prefs_configlet_main">
