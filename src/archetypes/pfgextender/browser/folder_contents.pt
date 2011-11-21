@@ -5,6 +5,13 @@
       xml:lang="en" lang="en"
       i18n:domain="plone"
       metal:use-macro="here/prefs_main_template/macros/master">
+
+    <metal:block fill-slot="top_slot">
+            <tal:defines tal:define="dummy python:request.set('enable_border',1);
+                                     disable_column_one python:request.set('disable_plone.leftcolumn',0);
+                                     disable_column_two python:request.set('disable_plone.rightcolumn',1);"/>
+    </metal:block>
+
   <body>
       <metal:content fill-slot="prefs_configlet_main">
         <div metal:use-macro="context/global_statusmessage/macros/portal_message">
