@@ -5,9 +5,7 @@
       xml:lang="en" lang="en"
       i18n:domain="plone"
       metal:use-macro="here/prefs_main_template/macros/master">
-
   <body>
-
       <metal:content fill-slot="prefs_configlet_main">
         <div metal:use-macro="context/global_statusmessage/macros/portal_message">
           Portal status message
@@ -17,23 +15,27 @@
             i18n:translate=""
             i18n:domain="pfgextender">Extension forms</h1>
       
-    <a href=""
-        class="link-parent"
-        tal:attributes="href string:$portal_url/plone_control_panel"
-        i18n:domain="plone"
-        i18n:translate="label_up_to_plone_setup">
-            Up to Site Setup
-    </a>
+        <a href=""
+            class="link-parent"
+            tal:attributes="href string:$portal_url/plone_control_panel"
+            i18n:domain="plone"
+            i18n:translate="label_up_to_plone_setup">
+              Up to Site Setup
+        </a>
 
-          <form name="folderContentsForm"
-                method="post"
-                action="folder_object"
-                tal:attributes="action context/absolute_url"
-                class="kssattr-serveraction-foldercontents_update_table">
-            <div tal:replace="structure view/contents_table"></div>
-            <input tal:replace="structure context/@@authenticator/authenticator" />
-          </form>
+        <form name="folderContentsForm"
+              method="post"
+              action="folder_object"
+              tal:attributes="action context/absolute_url"
+              class="kssattr-serveraction-foldercontents_update_table">
+          <div tal:replace="structure view/contents_table"></div>
+          <input tal:replace="structure context/@@authenticator/authenticator" />
+        </form>
+        
+        <p><a tal:attributes="href string:$portal_url/pfgextender-controlpanel"
+              i18n:domain="pfgextender"
+              i18n:translate="">Types Extensions</a></p>
+
       </metal:content>
-      
   </body>
 </html>
