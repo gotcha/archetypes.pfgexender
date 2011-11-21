@@ -29,3 +29,16 @@ def madeExtensible(obj, event):
     extender = sm.queryUtility(IPFGExtenderForm, name=portal_type)
     if extender is not None:
         makePFGExtensible(obj)
+
+
+def cannotRenameForm(obj, event):
+    """registered for IPFGExtenderForm
+    """
+    # block renames
+    #
+    # however, ObjectWillBeMovedEvent is notified also when deleting an object
+    # hence the need for a check on newParent
+    #
+    # however, also allow rename at creation time
+    if event.newParent and obj.checkCreationFlag():
+        raise TypeError('Extension forms should not be renamed.')

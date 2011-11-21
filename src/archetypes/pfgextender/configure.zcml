@@ -27,6 +27,11 @@
     handler=".handlers.movedPFGExtenderForm" />
 
   <subscriber
+    for="archetypes.pfgextender.interfaces.IPFGExtenderForm
+         OFS.interfaces.IObjectWillBeMovedEvent"
+    handler=".handlers.cannotRenameForm" />
+
+  <subscriber
     for="Products.Archetypes.interfaces.IBaseObject
          zope.app.container.interfaces.IObjectAddedEvent"
     handler=".handlers.madeExtensible" />
