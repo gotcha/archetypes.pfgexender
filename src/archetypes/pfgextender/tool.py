@@ -7,7 +7,6 @@ from zope.component import getSiteManager
 from Products.CMFCore.PortalFolder import PortalFolder
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
-from Products.PloneFormGen.content.form import FormFolder
 
 from archetypes.pfgextender.interfaces import IPFGExtenderForm
 from archetypes.pfgextender.interfaces import IPFGExtensible
@@ -34,8 +33,6 @@ class PFGExtenderTool(UniqueObject, PortalFolder):
     security = ClassSecurityInfo()
 
     displayContentsTab = False
-
-    allowed_types = [FormFolder.portal_type]
 
     def registerFormForPortalType(self, form_id, portal_type):
         newForm = self.get(form_id, None)
