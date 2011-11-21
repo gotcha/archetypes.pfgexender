@@ -1,0 +1,5 @@
+body.section-portal_pfgextender.template-folder_contents input[name^="folder_cut"],
+body.section-portal_pfgextender.template-folder_contents input[name^="folder_rename"],
+body.section-portal_pfgextender.template-folder_contents input[name^="content_status_history"] {
+  display: none;
+}
